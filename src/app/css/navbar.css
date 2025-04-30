@@ -1,0 +1,66 @@
+/* Reverso Navbar Styling */
+
+.home-navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  z-index: 999;
+  padding: 0.5rem 0;
+  transition: background-color 0.2s ease;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #343434;
+  font-size: 16px;
+  font-weight: 500;
+  position: relative;
+  padding: 0.5rem 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+  color: #d7b586;
+}
+
+.nav-link.active {
+  color: #d7b586;
+  font-weight: 600;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #d7b586;
+  transition: width 0.3s ease-in-out;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.login-button {
+  background-color: #343434 !important;
+  color: #f8f8ff !important;
+  padding: 6px 18px;
+  font-size: 14px;
+  border-radius: 6px;
+  text-transform: none;
+  font-weight: 500;
+}
+
+.icon-group svg {
+  cursor: pointer;
+  color: #343434;
+  transition: color 0.2s ease;
+}
+
+.icon-group svg:hover {
+  color: #d7b586;
+}

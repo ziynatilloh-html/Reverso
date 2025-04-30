@@ -1,6 +1,6 @@
 import "../css/app.css";
 import { Container } from "@mui/material";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 import HomePage from "./homePage";
 import ProductListPage from "./productListPage";
 import ProductDetailPage from "./productDetailPage";
@@ -9,10 +9,15 @@ import CheckoutPage from "./checkoutPage";
 import AccountPage from "./accountPage";
 import SearchPage from "./searchPage";
 import NotFoundPage from "./notFoundPage";
+import { HomeNavbar } from "../components/headers/HomeNavbar";
+import OtherNavbar from "../components/headers/OtherNavbar";
 
 function App() {
+  const location = useLocation();
   return (
     <>
+      {" "}
+      {location.pathname === "/" ? <HomeNavbar /> : <OtherNavbar />}
       <nav>
         <ul
           style={{
@@ -42,7 +47,6 @@ function App() {
           </li>
         </ul>
       </nav>
-
       <Container maxWidth="lg">
         <Routes>
           <Route path="/" element={<HomePage />} />
