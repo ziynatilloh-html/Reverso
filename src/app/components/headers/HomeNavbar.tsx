@@ -1,10 +1,5 @@
 import { Box, Button, Container, Stack } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
-import Badge from "@mui/material/Badge";
 import "../../css/navbar.css";
 
 export function HomeNavbar() {
@@ -25,7 +20,7 @@ export function HomeNavbar() {
               <img
                 src="/img/logo.png"
                 alt="Reverso Logo"
-                style={{ height: "36px", objectFit: "contain" }}
+                style={{ height: "190px", objectFit: "contain" }}
               />
             </NavLink>
           </Box>
@@ -38,7 +33,11 @@ export function HomeNavbar() {
                 isActive ? "nav-link active" : "nav-link"
               }
             >
-              Home <KeyboardArrowDownRoundedIcon fontSize="small" />
+              Home{" "}
+              <i
+                className="icon ion-ios-arrow-down"
+                style={{ fontSize: "15px" }}
+              ></i>
             </NavLink>
             <NavLink
               to="/products"
@@ -46,7 +45,11 @@ export function HomeNavbar() {
                 isActive ? "nav-link active" : "nav-link"
               }
             >
-              Shop <KeyboardArrowDownRoundedIcon fontSize="small" />
+              Shop{" "}
+              <i
+                className="icon ion-ios-arrow-down"
+                style={{ fontSize: "15px" }}
+              ></i>
             </NavLink>
             <NavLink
               to="/about"
@@ -94,12 +97,18 @@ export function HomeNavbar() {
               </Button>
             )}
 
-            <Box display="flex" alignItems="center" gap={2}>
-              <Badge badgeContent={3} color="warning">
-                <ShoppingBagOutlinedIcon />
-              </Badge>
-              <SearchOutlinedIcon />
-              <MenuOutlinedIcon />
+            <Box
+              className="icon-group"
+              display="flex"
+              alignItems="center"
+              gap={2}
+            >
+              <div className="custom-badge">
+                <i className="icon ion-ios-cart"></i>
+                <span className="badge-count">3</span>
+              </div>
+              <i className="icon ion-ios-search"></i>
+              <i className="icon ion-ios-menu"></i>
             </Box>
           </Stack>
         </Stack>

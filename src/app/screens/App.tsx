@@ -11,6 +11,7 @@ import SearchPage from "./searchPage";
 import NotFoundPage from "./notFoundPage";
 import { HomeNavbar } from "../components/headers/HomeNavbar";
 import OtherNavbar from "../components/headers/OtherNavbar";
+import Footer from "../components/footer";
 
 function App() {
   const location = useLocation();
@@ -59,6 +60,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Container>
+      <Footer />
     </>
   );
 }
