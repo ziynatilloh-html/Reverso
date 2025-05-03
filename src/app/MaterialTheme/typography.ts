@@ -1,4 +1,4 @@
-export default {
+const typography = {
   fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
   h1: {
     fontWeight: 600,
@@ -32,3 +32,5 @@ export default {
     textTransform: "none",
   },
 };
+
+export default typography;

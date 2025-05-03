@@ -1,10 +1,21 @@
 import { Box, Button, Container, Stack } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import "../../css/navbar.css";
+import MiniCartDrawer from "./Basket";
+import { useState } from "react";
 
 export function HomeNavbar() {
   const authMember = null;
 
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  /*==HANDLERS==*/
+  const handleCartOpen = () => {
+    setIsCartOpen(true);
+  };
+  const handleCartClose = () => {
+    setIsCartOpen(false);
+  };
   return (
     <div className="home-navbar">
       <Container sx={{ mt: "30px", height: "80px" }}>
@@ -68,7 +79,7 @@ export function HomeNavbar() {
               Contact Us
             </NavLink>
 
-            {/* Conditional Auth Links */}
+            <MiniCartDrawer isOpen={isCartOpen} onClose={handleCartClose} />
             {authMember ? (
               <>
                 <NavLink
@@ -103,7 +114,7 @@ export function HomeNavbar() {
               alignItems="center"
               gap={2}
             >
-              <div className="custom-badge">
+              <div className="custom-badge" onClick={handleCartOpen}>
                 <i className="icon ion-ios-cart"></i>
                 <span className="badge-count">3</span>
               </div>

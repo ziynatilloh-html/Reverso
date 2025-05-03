@@ -21,17 +21,14 @@ export function Footer() {
             timeless style to your wardrobe.
           </p>
           <div className="social-icons">
-            <a href="#" className="facebook">
+            <a href="https://facebook.com" className="facebook">
               <i className="icon ion-logo-facebook"></i>
             </a>
-            <a href="#" className="twitter">
+            <a href="https://instagram.com" className="twitter">
               <i className="icon ion-logo-twitter"></i>
             </a>
-            <a href="#" className="instagram">
+            <a href="https://twitter.com" className="instagram">
               <i className="icon ion-logo-instagram"></i>
-            </a>
-            <a href="#" className="telegram">
-              <i className="icon ion-logo-telegram"></i>
             </a>
           </div>
         </div>
