@@ -28,11 +28,22 @@ export default function RegisterForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
-    if (name === "memberImage" && files) {
-      setFormData({ ...formData, memberImage: files[0] });
+    let updatedFormData = { ...formData, [name]: files ? files[0] : value };
+
+    if (
+      (name === "memberPassword" &&
+        updatedFormData.confirmPassword &&
+        value !== updatedFormData.confirmPassword) ||
+      (name === "confirmPassword" &&
+        updatedFormData.memberPassword &&
+        value !== updatedFormData.memberPassword)
+    ) {
+      setError("Passwords do not match.");
     } else {
-      setFormData({ ...formData, [name]: value });
+      setError("");
     }
+
+    setFormData(updatedFormData);
   };
   const handleGoogleSignup = () => {
     window.location.href = "http://localhost:5001/auth/member/google";
@@ -41,6 +52,12 @@ export default function RegisterForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (formData.memberPassword !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     const form = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null) {

@@ -17,14 +17,19 @@ import "../css/basket.css";
 import "../css/navbar.css";
 import "../css/footer.css";
 import "../css/app.css";
+import ForgotPasswordForm from "../components/auth/ForgotPasswordForm";
+import ResetPasswordPage from "../components/auth/ResetPasswordForm";
 
 function App() {
   const location = useLocation();
 
   // Check if we're on an auth page
-  const hideNavAndFooter = ["/login", "/member/signup"].includes(
-    location.pathname
-  );
+  const hideNavAndFooter = [
+    "/login",
+    "/member/signup",
+    "/forgot-password",
+    "/reset-password/:token",
+  ].includes(location.pathname);
 
   return (
     <>
@@ -46,6 +51,8 @@ function App() {
         {/* Authentication pages */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/member/signup" element={<SignupPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordForm />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />

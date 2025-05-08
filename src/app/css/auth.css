@@ -77,3 +77,26 @@
 .google-signup-button:hover {
   background-color: #f8f9fa;
 }
+.auth-form a {
+  text-decoration: none;
+  color: #3f51b5; /* same as your main color or slightly muted */
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.auth-form a:hover {
+  color: #2c3e50; /* darker on hover */
+}
+
+.auth-links {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.auth-links a + a::before {
+  content: " | ";
+  color: #aaa;
+  margin: 0 0.3rem;
+}

@@ -1,14 +1,25 @@
 import React, { useState } from "react";
-import { Box, Button, TextField, Typography, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  TextField,
+  Typography,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../css/auth.css";
+
 export default function LoginForm() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     memberNick: "",
     memberPassword: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,61 +30,98 @@ export default function LoginForm() {
     e.preventDefault();
     setError("");
     try {
-      const res = await axios.post("/api/member/login", formData);
+      const apiUrl = process.env.REACT_APP_API_URL;
+      const res = await axios.post(`${apiUrl}/api/member/login`, formData);
       console.log(res.data);
-      navigate("/");
+      navigate("/account");
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed.");
     }
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5001/auth/member/google";
+  };
+
   return (
-    <Box className="auth-form">
-      <Typography variant="h4" mb={3}>
-        Login
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={2}>
-          <TextField
-            name="memberNick"
-            label="Nickname or Email"
-            variant="outlined"
-            fullWidth
-            value={formData.memberNick}
-            onChange={handleChange}
-            required
-          />
-          <TextField
-            name="memberPassword"
-            label="Password"
-            type="password"
-            variant="outlined"
-            fullWidth
-            value={formData.memberPassword}
-            onChange={handleChange}
-            required
-          />
-          {error && <Typography color="error">{error}</Typography>}
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            className="auth-button"
-          >
+    <Box className="auth-container">
+      {/* LEFT SIDE */}
+      <Box className="auth-left">
+        <Typography variant="h2">
+          “Welcome back to Reverso – Login to continue.”
+        </Typography>
+      </Box>
+
+      {/* RIGHT SIDE */}
+      <Box className="auth-right">
+        <Box className="auth-form">
+          <Typography variant="h4" mb={3}>
             Login
-          </Button>
-          <Button
-            variant="outlined"
-            fullWidth
-            onClick={() => (window.location.href = "/auth/google")} // update your Google route here
-          >
-            Login with Google
-          </Button>
-        </Stack>
-      </form>
-      <Typography mt={2}>
-        Don't have an account? <a href="/signup">Register here</a>
-      </Typography>
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <Stack spacing={2}>
+              <TextField
+                name="memberNick"
+                label="Nickname or Email"
+                variant="outlined"
+                fullWidth
+                value={formData.memberNick}
+                onChange={handleChange}
+                required
+              />
+              <TextField
+                name="memberPassword"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                variant="outlined"
+                fullWidth
+                value={formData.memberPassword}
+                onChange={handleChange}
+                required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword((prev) => !prev)}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              {error && <Typography color="error">{error}</Typography>}
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                className="auth-button"
+              >
+                Login
+              </Button>
+              <Button
+                fullWidth
+                variant="contained"
+                className="google-signup-button"
+                startIcon={
+                  <img
+                    src="/img/google-logo.svg"
+                    alt="Google logo"
+                    style={{ width: "20px", height: "20px" }}
+                  />
+                }
+                onClick={handleGoogleLogin}
+              >
+                Login with Google
+              </Button>
+            </Stack>
+          </form>
+          <Box className="auth-links">
+            <a href="/member/signup">Register here</a>
+            <a href="/forgot-password">Forgot password?</a>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }
