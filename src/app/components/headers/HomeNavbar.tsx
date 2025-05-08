@@ -1,6 +1,5 @@
 import { Box, Button, Container, Stack } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import "../../css/navbar.css";
 import MiniCartDrawer from "./Basket";
 import { useState } from "react";
 

@@ -1,0 +1,79 @@
+.auth-container {
+  display: flex;
+  height: 100vh;
+}
+
+.auth-left {
+  flex: 1;
+  background: url("/public/img/signup-background.png") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 2rem;
+  border-radius: 0px 100px 100px 0px;
+}
+
+.auth-left h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  max-width: 300px;
+  line-height: 1.4;
+}
+
+.auth-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.auth-form {
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-form h4 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.MuiTextField-root input {
+  border-radius: 30px;
+
+  padding: 12px;
+}
+
+.auth-button {
+  background-color: #3c64f4 !important;
+
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: 30px;
+}
+
+.auth-button:hover {
+  background-color: #2a4ed3 !important;
+}
+
+.upload-button {
+  border-radius: 30px !important;
+  text-transform: none !important;
+}
+
+.google-signup-button {
+  background-color: rgb(219, 219, 219);
+  color: #3e6da7;
+  border: 1px solid #dadce0;
+  font-weight: 500;
+  text-transform: none;
+  padding: 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.google-signup-button:hover {
+  background-color: #f8f9fa;
+}

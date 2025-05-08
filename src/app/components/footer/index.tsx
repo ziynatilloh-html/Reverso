@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import "../../css/footer.css";
 
 export function Footer() {
   const [email, setEmail] = useState("");

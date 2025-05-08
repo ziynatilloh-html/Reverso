@@ -1,6 +1,4 @@
-import "../css/app.css";
-import { Container } from "@mui/material";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./homePage";
 import ProductListPage from "./productListPage";
 import ProductDetailPage from "./productDetailPage";
@@ -12,55 +10,49 @@ import NotFoundPage from "./notFoundPage";
 import { HomeNavbar } from "../components/headers/HomeNavbar";
 import OtherNavbar from "../components/headers/OtherNavbar";
 import Footer from "../components/footer";
+import LoginPage from "../pages/LoginPage";
+import SignupPage from "../pages/SingupPage";
+
+import "../css/basket.css";
+import "../css/navbar.css";
+import "../css/footer.css";
+import "../css/app.css";
 
 function App() {
   const location = useLocation();
+
+  // Check if we're on an auth page
+  const hideNavAndFooter = ["/login", "/member/signup"].includes(
+    location.pathname
+  );
+
   return (
     <>
-      {" "}
-      {location.pathname === "/" ? <HomeNavbar /> : <OtherNavbar />}
-      <nav>
-        <ul
-          style={{
-            display: "flex",
-            gap: "1rem",
-            listStyle: "none",
-            padding: "1rem",
-          }}
-        >
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/products">Products</Link>
-          </li>
-          <li>
-            <Link to="/cart">Cart</Link>
-          </li>
-          <li>
-            <Link to="/checkout">Checkout</Link>
-          </li>
-          <li>
-            <Link to="/account">Account</Link>
-          </li>
-          <li>
-            <Link to="/search">Search</Link>
-          </li>
-        </ul>
-      </nav>
-      <Container maxWidth="lg">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<ProductListPage />} />
-          <Route path="/products/:id" element={<ProductDetailPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/account" element={<AccountPage />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Container>
-      <Footer />
+      {/* Navbar: only show if NOT on login/signup */}
+      {!hideNavAndFooter &&
+        (location.pathname === "/" ? <HomeNavbar /> : <OtherNavbar />)}
+
+      {/* Routes */}
+      <Routes>
+        {/* Public pages */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/products" element={<ProductListPage />} />
+        <Route path="/products/:id" element={<ProductDetailPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/account" element={<AccountPage />} />
+        <Route path="/search" element={<SearchPage />} />
+
+        {/* Authentication pages */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/member/signup" element={<SignupPage />} />
+
+        {/* 404 */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+
+      {/* Footer: only show if NOT on login/signup */}
+      {!hideNavAndFooter && <Footer />}
     </>
   );
 }
