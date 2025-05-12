@@ -27,7 +27,7 @@ export default function Banner() {
         <Button
           variant="contained"
           className="banner-button"
-          onClick={() => navigate("/signup")}
+          onClick={() => navigate("/member/signup")}
         >
           Sign Up
         </Button>
