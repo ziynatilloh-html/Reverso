@@ -1,16 +1,9 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-
-import { createSlice } from "@reduxjs/toolkit";
-
-const dummySlice = createSlice({
-  name: "dummy",
-  initialState: {},
-  reducers: {},
-});
+import homePageReducer from "../screens/homePage/slice"; // ✅ Import your actual slice
 
 export const store = configureStore({
   reducer: {
-    dummy: dummySlice.reducer,
+    homePage: homePageReducer, // ✅ MUST match what your selector expects
   },
 });
 
