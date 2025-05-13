@@ -3,6 +3,7 @@ import Banner from "../../components/headers/Banner";
 import { HomeNavbar } from "../../components/headers/HomeNavbar";
 import Statistics from "./Statistics";
 import NewProducts from "./NewProducts";
+import BannerBlock from "./BannerBlock";
 
 export default function HomePage() {
   return (
@@ -11,6 +12,8 @@ export default function HomePage() {
       <Banner />
       <Statistics/>
       <NewProducts /> 
+      <BannerBlock /> 
+
     </>
   );
 }
