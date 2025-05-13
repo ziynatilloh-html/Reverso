@@ -154,3 +154,10 @@
   color: #ffc107;
   font-size: 14px;
 }
+.product-views {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #777;
+  margin-top: 5px;
+}

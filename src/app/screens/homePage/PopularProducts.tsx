@@ -1,11 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectNewProducts } from './selector';
-import { Product } from '../../../app/libs/types/product';
-import { ProductTag } from '../../../app/libs/enums/products.enum';
+import { Product } from '../../libs/types/product';
+import { ProductTag } from '../../libs/enums/products.enum';
 
 import '../../css/newProducts.css';
-import Swiper from '../../../app/components/common/Swiper';
+import Swiper from '../../components/common/Swiper';
+import { Eye } from 'lucide-react';
+
+
 
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => (
   <div className="product-card">
@@ -16,16 +19,20 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => (
     </div>
     <div className="product-info">
       <h3 className="product-name">{product.productName}</h3>
+
       <div className="product-price">
         <span className="price-now">${product.productPrice}</span>
         <span className="price-old">${product.productPrice + 15}</span>
       </div>
+      <div className="product-views">
+  <Eye size={16} style={{ marginRight: '5px' }} />
+  {product.productViews ?? 123} Views
+</div>
       <div className="product-rating">★★★★☆</div>
     </div>
   </div>
 );
-
-export default function NewProducts() {
+export default function PopularProducts() {
   const products = useSelector(selectNewProducts) as Product[];
   const prevRef = useRef<HTMLDivElement>(null);
   const nextRef = useRef<HTMLDivElement>(null);
@@ -86,7 +93,7 @@ export default function NewProducts() {
     <section className="new-products-section">
       <div className="container">
         <div className="new-products-header">
-          <h2>New Arrivals</h2>
+          <h2>Popular Products</h2>
           
         </div>
         {navReady && (
