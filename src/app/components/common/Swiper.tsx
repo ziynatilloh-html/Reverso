@@ -5,7 +5,7 @@ import 'swiper/css/navigation';
 
 interface SwiperProps {
   slides: React.ReactNode[];
-  slidesPerView?: number;
+  slidesPerView?: number | 'auto';
   spaceBetween?: number;
   loop?: boolean;
   navigation?: any;

@@ -4,8 +4,9 @@ import { HomeNavbar } from "../../components/headers/HomeNavbar";
 import Statistics from "./Statistics";
 import NewProducts from "./NewProducts";
 import BannerBlock from "./BannerBlock";
-import AllProducts from "./PopularProducts";
 import PopularProducts from "./PopularProducts";
+import HeroBanner from "./HeroBanner";
+import Events from "./Events";
 
 export default function HomePage() {
   return (
@@ -14,16 +15,10 @@ export default function HomePage() {
       <Banner />
       <Statistics/>
       <NewProducts /> 
-      <BannerBlock /> 
+      <BannerBlock />
       <PopularProducts/>
-      {/* <BestSellers /> */}
-      {/* <FeaturedProducts /> */}
-      {/* <DiscountedProducts /> */}
-      {/* <TrendingProducts /> */}
-      {/* <CustomerReviews /> */}
-      {/* <NewsletterSubscription /> */}
-      {/* <Footer /> */}
-
+      <HeroBanner />
+      <Events />
     </>
   );
 }
