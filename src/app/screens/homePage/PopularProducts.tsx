@@ -4,7 +4,7 @@ import { selectNewProducts } from './selector';
 import { Product } from '../../libs/types/product';
 import { ProductTag } from '../../libs/enums/products.enum';
 
-import '../../css/newProducts.css';
+import '../../css/homePage.css';
 import Swiper from '../../components/common/Swiper';
 import { Eye } from 'lucide-react';
 

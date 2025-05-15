@@ -4,7 +4,7 @@ import { selectNewProducts } from './selector';
 import { Product } from '../../../app/libs/types/product';
 import { ProductTag } from '../../../app/libs/enums/products.enum';
 
-import '../../css/newProducts.css';
+import '../../css/homePage.css';
 import Swiper from '../../../app/components/common/Swiper';
 
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => (
