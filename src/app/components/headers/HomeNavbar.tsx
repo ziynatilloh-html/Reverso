@@ -1,20 +1,17 @@
 import { Box, Button, Container, Stack } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import MiniCartDrawer from "./Basket";
 import { useState } from "react";
+import { useGlobal } from "../../../app/hooks/useGlobal"; // ✅ Make sure path is correct
 
 export function HomeNavbar() {
-  const authMember = null;
-
+  const { authMember } = useGlobal(); // ✅ Use global context
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const navigate = useNavigate();
 
-  /*==HANDLERS==*/
-  const handleCartOpen = () => {
-    setIsCartOpen(true);
-  };
-  const handleCartClose = () => {
-    setIsCartOpen(false);
-  };
+  const handleCartOpen = () => setIsCartOpen(true);
+  const handleCartClose = () => setIsCartOpen(false);
+
   return (
     <div className="home-navbar">
       <Container sx={{ mt: "30px", height: "80px" }}>
@@ -43,11 +40,7 @@ export function HomeNavbar() {
                 isActive ? "nav-link active" : "nav-link"
               }
             >
-              Home{" "}
-              <i
-                className="icon ion-ios-arrow-down"
-                style={{ fontSize: "15px" }}
-              ></i>
+              Home
             </NavLink>
             <NavLink
               to="/products"
@@ -55,11 +48,7 @@ export function HomeNavbar() {
                 isActive ? "nav-link active" : "nav-link"
               }
             >
-              Shop{" "}
-              <i
-                className="icon ion-ios-arrow-down"
-                style={{ fontSize: "15px" }}
-              ></i>
+              Shop
             </NavLink>
             <NavLink
               to="/about"
@@ -78,7 +67,10 @@ export function HomeNavbar() {
               Contact Us
             </NavLink>
 
+            {/* Basket Icon */}
             <MiniCartDrawer isOpen={isCartOpen} onClose={handleCartClose} />
+
+            {/* Authenticated vs Unauthenticated */}
             {authMember ? (
               <>
                 <NavLink
@@ -102,11 +94,13 @@ export function HomeNavbar() {
               <Button
                 variant="contained"
                 sx={{ backgroundColor: "#343434", color: "#f8f8ff" }}
+                onClick={() => navigate("/login")}
               >
                 Login
               </Button>
             )}
 
+            {/* Right Icons */}
             <Box
               className="icon-group"
               display="flex"

@@ -12,8 +12,12 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../css/auth.css";
+import { useGlobal } from "../../hooks/useGlobal";
+
 
 export default function LoginForm() {
+  const { setAuthMember } = useGlobal();
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     memberNick: "",
@@ -25,19 +29,29 @@ export default function LoginForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+  
     try {
       const apiUrl = process.env.REACT_APP_API_URL;
-      const res = await axios.post(`${apiUrl}/api/member/login`, formData);
-      console.log(res.data);
+      const res = await axios.post(`${apiUrl}/api/member/login`, formData, {
+        withCredentials: true,
+      });
+  
+      // ✅ Save in localStorage
+      localStorage.setItem("memberData", JSON.stringify(res.data.member));
+  
+      // ✅ Update global context state
+      setAuthMember(res.data.member);
+  
+      // ✅ Navigate to account
       navigate("/account");
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed.");
     }
   };
+  
 
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:5001/auth/member/google";

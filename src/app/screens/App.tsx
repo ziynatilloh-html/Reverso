@@ -12,18 +12,20 @@ import OtherNavbar from "../components/headers/OtherNavbar";
 import Footer from "../components/footer";
 import LoginPage from "../pages/LoginPage";
 import SignupPage from "../pages/SingupPage";
+import ForgotPasswordForm from "../components/auth/ForgotPasswordForm";
+import ResetPasswordPage from "../components/auth/ResetPasswordForm";
+import { useGlobal } from "../hooks/useGlobal";
 
 import "../css/basket.css";
 import "../css/navbar.css";
 import "../css/footer.css";
 import "../css/app.css";
-import ForgotPasswordForm from "../components/auth/ForgotPasswordForm";
-import ResetPasswordPage from "../components/auth/ResetPasswordForm";
 
 function App() {
   const location = useLocation();
+  const { authMember } = useGlobal();
 
-  // Check if we're on an auth page
+  // Pages where Navbar and Footer should be hidden
   const hideNavAndFooter = [
     "/login",
     "/member/signup",
@@ -33,11 +35,9 @@ function App() {
 
   return (
     <>
-      {/* Navbar: only show if NOT on login/signup */}
-      {!hideNavAndFooter &&
-        (location.pathname === "/" ? <HomeNavbar /> : <OtherNavbar />)}
+      {/* ✅ Navbar logic — based on authMember */}
+      {!hideNavAndFooter && (authMember ? <OtherNavbar /> : <HomeNavbar />)}
 
-      {/* Routes */}
       <Routes>
         {/* Public pages */}
         <Route path="/" element={<HomePage />} />
@@ -48,17 +48,17 @@ function App() {
         <Route path="/account" element={<AccountPage />} />
         <Route path="/search" element={<SearchPage />} />
 
-        {/* Authentication pages */}
+        {/* Auth pages */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/member/signup" element={<SignupPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
-        {/* 404 */}
+        {/* Not found */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      {/* Footer: only show if NOT on login/signup */}
+      {/* ✅ Footer logic */}
       {!hideNavAndFooter && <Footer />}
     </>
   );
