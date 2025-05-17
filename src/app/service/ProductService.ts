@@ -2,7 +2,6 @@ import axios from "axios";
 import { serverApi } from "../libs/config";
 import { Product, ProductInquiry } from "../libs/types/product";
 
-
 class ProductService {
   private readonly path: string;
   constructor() {
@@ -26,19 +25,19 @@ class ProductService {
     }
   }
 
-  /** Get Single Product by ID */
-  public async getProduct(productId: string): Promise<Product> {
+  /** Get Popular Products */
+  /** Get Popular Product by ID and increase views */
+  public async getPopularProduct(productId: string): Promise<Product> {
     try {
-      const url = `${this.path}/product/${productId}`;
+      const url = `${this.path}/product/popular/${productId}`;
       const result = await axios.get(url, { withCredentials: true });
-      console.log("getProduct", result);
+      console.log("getPopularProduct", result);
       return result.data;
     } catch (err) {
-      console.error("Error, getProduct:", err);
+      console.error("Error, getPopularProduct:", err);
       throw err;
     }
   }
-
 }
 
 export default ProductService;
