@@ -18,13 +18,14 @@ export enum ProductCategory {
   FASHION = "Fashion",
 }
 export enum ProductTag {
-  HOT = "Hot",
-  NEW_ARRIVAL = "New Arrival",
-  BESTSELLER = "Bestseller",
-  LIMITED_EDITION = "Limited Edition",
-  SALE = "Sale",
-  EXCLUSIVE = "Exclusive",
+  HOT = "HOT",
+  NEW_ARRIVAL = "NEW_ARRIVAL",
+  BESTSELLER = "BESTSELLER",
+  LIMITED_EDITION = "LIMITED_EDITION",
+  SALE = "SALE",
+  EXCLUSIVE = "EXCLUSIVE",
 }
+
 export enum ProductStatus {
   ACTIVE = "Active",
   OUT_OF_STOCK = "Out of Stock",

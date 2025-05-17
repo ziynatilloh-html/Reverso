@@ -15,12 +15,19 @@ export interface Product {
   productLeftCount: number;
   productSize?: ProductSize;
   productDesc?: string;
-  productImages: string[]; // full image URLs
+  productImages: string[];
   productViews: number;
   productVolume?: number;
-  productTags?: ProductTag[]; // multiple tags supported (NEW, SALE, etc.)
-  createdAt: Date;
+  productTags?: ProductTag[];
+  productRating?: number;
   updatedAt: Date;
+}
+export interface ProductInquiry {
+  order: string;
+  page: number;
+  limit: number;
+  productCategory?: ProductCategory;
+  search?: string;
 }
 // Product creation input (for forms, admin panels, API calls)
 export interface ProductInput {
