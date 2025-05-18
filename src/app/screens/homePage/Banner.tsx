@@ -2,9 +2,11 @@ import React from "react";
 import { Box, Button } from "@mui/material";
 import "../../css/homePage.css";
 import { useNavigate } from "react-router-dom";
+import { useGlobal } from "../../../app/hooks/useGlobal"; // ✅ Import context
 
 export default function Banner() {
   const navigate = useNavigate();
+  const { authMember } = useGlobal(); // ✅ Check login state
 
   return (
     <Box className="banner">
@@ -23,9 +25,9 @@ export default function Banner() {
         <Button
           variant="contained"
           className="banner-button"
-          onClick={() => navigate("/member/signup")}
+          onClick={() => navigate(authMember ? "/products" : "/member/signup")}
         >
-          Sign Up Now
+          {authMember ? "Shop Now" : "Sign Up Now"}
         </Button>
       </Box>
     </Box>

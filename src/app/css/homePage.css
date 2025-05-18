@@ -610,3 +610,71 @@
     display: none;
   }
 }
+/* 🔥 Fancy dropdown menu styling */
+.MuiMenu-paper {
+  border-radius: 16px !important;
+  padding: 12px 0;
+  background-color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+  min-width: 350px !important;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Avatar styling */
+.MuiMenu-paper .MuiAvatar-root {
+  border: 3px solid #e1b168; /* Golden ring */
+  margin-top: 4px;
+  transition: transform 0.2s ease;
+}
+
+.MuiMenu-paper .MuiAvatar-root:hover {
+  transform: scale(1.1);
+}
+
+/* Username text */
+.MuiMenu-paper .MuiBox-root {
+  font-size: 16px;
+  color: #343434;
+}
+
+/* Menu items */
+.MuiMenuItem-root {
+  padding: 10px 20px !important;
+  transition: background-color 0.2s ease;
+}
+
+.MuiMenuItem-root:hover {
+  background-color: #f8f8f8 !important;
+}
+
+/* Logout icon */
+.MuiListItemIcon-root {
+  min-width: 32px;
+  color: #d62828 !important;
+}
+
+/* Optional: golden underline under avatar */
+.fancy-underline {
+  height: 2px;
+  background: linear-gradient(to right, #e1b168, #fff);
+  width: 50%;
+  margin: 8px auto 0 auto;
+  border-radius: 4px;
+}
+/* Hide scrollbar while allowing scroll */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* remove native scroll */
+}
+
+body {
+  overflow-y: auto; /* enable scroll but hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}

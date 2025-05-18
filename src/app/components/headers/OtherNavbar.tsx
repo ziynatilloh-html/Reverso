@@ -20,16 +20,18 @@ export default function OtherNavbar() {
   const { authMember, setAuthMember } = useGlobal();
   const navigate = useNavigate();
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
 
   const handleCartOpen = () => setIsCartOpen(true);
   const handleCartClose = () => setIsCartOpen(false);
 
-  const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
+    setMenuAnchor(e.currentTarget);
   };
 
-  const handleMenuClose = () => setAnchorEl(null);
+  const handleMenuClose = () => {
+    setMenuAnchor(null);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("memberData");
@@ -60,50 +62,36 @@ export default function OtherNavbar() {
 
           {/* Navigation */}
           <Stack direction="row" spacing={4} alignItems="center">
-            <NavLink to="/" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>Home</NavLink>
-            <NavLink to="/products" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>Shop</NavLink>
-            <NavLink to="/about" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>About Us</NavLink>
-            <NavLink to="/contact" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>Contact Us</NavLink>
+            <NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+              Home
+            </NavLink>
+            <NavLink to="/products" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+              Shop
+            </NavLink>
+           
 
-            {/* Cart Drawer */}
+            {/* Cart */}
             <MiniCartDrawer isOpen={isCartOpen} onClose={handleCartClose} />
 
-            {/* Always visible My Page and Orders */}
+            {/* Orders + My Page visible always when logged in */}
             {authMember && (
               <>
-                <NavLink to="/orders" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>Orders</NavLink>
-                <NavLink to="/account" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>My Page</NavLink>
+                <NavLink to="/orders" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+                  Orders
+                </NavLink>
+                <NavLink to="/account" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+                  My Page
+                </NavLink>
               </>
             )}
-
-            {/* Hamburger Dropdown Button (Circle Avatar & Menu) */}
-            {authMember ? (
-              <>
-                <IconButton onClick={handleAvatarClick}>
-                  <Avatar
-                    alt={authMember.memberNick}
-                    src={`${serverApi}/${authMember.memberImage}`}
-                    sx={{ width: 40, height: 40 }}
-                  />
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleMenuClose}
-                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                  transformOrigin={{ vertical: "top", horizontal: "right" }}
-                >
-                  <MenuItem onClick={() => { navigate("/account"); handleMenuClose(); }}>My Page</MenuItem>
-                  <MenuItem onClick={() => { navigate("/orders"); handleMenuClose(); }}>Orders</MenuItem>
-                  <MenuItem onClick={handleLogout}>
-                    <ListItemIcon>
-                      <Logout fontSize="small" />
-                    </ListItemIcon>
-                    Logout
-                  </MenuItem>
-                </Menu>
-              </>
-            ) : (
+             <NavLink to="/about" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+              About Us
+            </NavLink>
+            <NavLink to="/contact" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+              Contact Us
+            </NavLink>
+            {/* Login if not logged in */}
+            {!authMember && (
               <Button
                 variant="contained"
                 sx={{ backgroundColor: "#343434", color: "#f8f8ff" }}
@@ -120,11 +108,56 @@ export default function OtherNavbar() {
                 <span className="badge-count">3</span>
               </div>
               <i className="icon ion-ios-search"></i>
-              <i className="icon ion-ios-menu"></i>
+
+              {/* Hamburger (≡) - triggers dropdown */}
+              <IconButton onClick={handleMenuOpen}>
+                <i className="icon ion-ios-menu"></i>
+              </IconButton>
             </Box>
           </Stack>
         </Stack>
       </Container>
+
+      {/* Hamburger Dropdown Menu */}
+      <Menu
+        anchorEl={menuAnchor}
+        open={Boolean(menuAnchor)}
+        onClose={handleMenuClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        {authMember && (
+          <Box textAlign="center" py={1.5}>
+            <Avatar
+              src={`${serverApi}/uploads/members/${authMember.memberImage}`}
+              sx={{ width: 56, height: 56, margin: "0 auto" }}
+            />
+            <Box mt={1} fontWeight="bold">{authMember.memberNick}</Box>
+          </Box>
+        )}
+
+{authMember
+    ? [
+        <MenuItem key="account" onClick={() => { navigate("/account"); handleMenuClose(); }}>
+          My Page
+        </MenuItem>,
+        <MenuItem key="orders" onClick={() => { navigate("/orders"); handleMenuClose(); }}>
+          Orders
+        </MenuItem>,
+        <MenuItem key="logout" onClick={handleLogout}>
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
+      ]
+    : [
+        <MenuItem key="login" onClick={() => { navigate("/login"); handleMenuClose(); }}>
+          Login
+        </MenuItem>
+      ]
+  }
+</Menu>
     </div>
   );
 }
