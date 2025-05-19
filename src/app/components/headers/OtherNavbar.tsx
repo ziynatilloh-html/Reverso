@@ -110,7 +110,10 @@ export default function OtherNavbar() {
             {/* Right Icons */}
             <Box className="icon-group" display="flex" alignItems="center" gap={2}>
   <div className="custom-badge" onClick={handleCartOpen}>
-    <i className="icon ion-ios-cart"></i>
+  <div className="custom-badge cart-icon">
+  <i className="icon ion-ios-cart"></i>
+</div>
+
     <span className="badge-count">{cartCount}</span> {/* ✅ Fixed */}
   </div>
   <i className="icon ion-ios-search"></i>

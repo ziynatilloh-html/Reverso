@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "../../css/productsListPage.css";
 import { Eye, ShoppingCart } from "lucide-react";
 import Pagination from "../../../app/libs/data/Pagination";
@@ -35,6 +35,8 @@ const Products: React.FC<ProductsProps> = ({
   const [total, setTotal] = useState(0);
   const productsPerPage = 6;
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -69,7 +71,7 @@ const Products: React.FC<ProductsProps> = ({
     };
 
     fetchData();
-  }, [currentPage, sortOrder, filters]); // ✅ re-fetch on filter change
+  }, [currentPage, sortOrder, filters]);
 
   const handleCardClick = (id: string) => {
     setSelectedProductIds((prev) =>
@@ -78,8 +80,34 @@ const Products: React.FC<ProductsProps> = ({
   };
 
   const totalPages = Math.ceil(total / productsPerPage);
-  const dispatch = useAppDispatch();
 
+  const animateToCart = (e: React.MouseEvent, imageSrc: string) => {
+    const cartIcon = document.querySelector(".cart-icon");
+    if (!cartIcon) return;
+
+    const img = document.createElement("img");
+    img.src = imageSrc;
+    img.className = "flying-image";
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+
+    img.style.top = `${rect.top}px`;
+    img.style.left = `${rect.left}px`;
+
+    document.body.appendChild(img);
+
+    const cartRect = cartIcon.getBoundingClientRect();
+
+    requestAnimationFrame(() => {
+      img.style.transform = `translate(${cartRect.left - rect.left}px, ${
+        cartRect.top - rect.top
+      }px) scale(0.2)`;
+      img.style.opacity = "0";
+    });
+
+    setTimeout(() => {
+      document.body.removeChild(img);
+    }, 600);
+  };
 
   return (
     <>
@@ -95,13 +123,12 @@ const Products: React.FC<ProductsProps> = ({
               } ${isSelected ? "selected" : ""}`}
               onClick={() => handleCardClick(product._id)}
             >
-              
               <div className="antique-product-image">
-              {product.productTags?.length && product.productTags.length > 0 && (
-    <div className="antique-product-tag">
-      {product.productTags?.[0]?.replace("_", " ")}
-    </div>
-  )}
+                {product.productTags?.length && product.productTags.length > 0 && (
+                  <div className="antique-product-tag">
+                    {product.productTags?.[0]?.replace("_", " ")}
+                  </div>
+                )}
                 <img
                   src={`${serverApi}/${product.productImages[0]}`}
                   alt={product.productName}
@@ -131,22 +158,22 @@ const Products: React.FC<ProductsProps> = ({
                     <Eye size={16} /> {product.productViews} views
                   </div>
                   <button
-  onClick={(e) => {
-    e.stopPropagation(); // prevent card click selection
-    dispatch(
-      addToCart({
-        id: product._id,
-        name: product.productName,
-        price: product.productPrice,
-        image: product.productImages[0],
-        quantity: 1,
-      })
-    );
-  }}
->
-  <ShoppingCart size={18} />
-</button>
-
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      animateToCart(e, `${serverApi}/${product.productImages[0]}`);
+                      dispatch(
+                        addToCart({
+                          id: product._id,
+                          name: product.productName,
+                          price: product.productPrice,
+                          image: product.productImages[0],
+                          quantity: 1,
+                        })
+                      );
+                    }}
+                  >
+                    <ShoppingCart size={18} />
+                  </button>
                 </div>
               </div>
             </div>
