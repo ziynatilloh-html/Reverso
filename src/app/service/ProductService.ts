@@ -38,6 +38,41 @@ class ProductService {
       throw err;
     }
   }
+  /** Get All Products for Grid/List View */
+  public async getProductList(
+    input: ProductInquiry
+  ): Promise<{ products: Product[]; total: number }> {
+    try {
+      const params = new URLSearchParams();
+
+      params.append("order", input.order);
+      params.append("page", String(input.page));
+      params.append("limit", String(input.limit));
+
+      if (input.productCategory)
+        params.append("productCategory", input.productCategory);
+      if (input.search) params.append("search", input.search);
+
+      // ✅ Add these:
+      if (input.category?.length) {
+        input.category.forEach((val) => params.append("category", val));
+      }
+      if (input.size?.length) {
+        input.size.forEach((val) => params.append("size", val));
+      }
+      if (input.tag?.length) {
+        input.tag.forEach((val) => params.append("tag", val));
+      }
+
+      const url = `${this.path}/api/product/list?${params.toString()}`;
+      const result = await axios.get(url, { withCredentials: true });
+      console.log("getProductList", result);
+      return result.data;
+    } catch (err) {
+      console.error("Error, getProductList:", err);
+      throw err;
+    }
+  }
 }
 
 export default ProductService;

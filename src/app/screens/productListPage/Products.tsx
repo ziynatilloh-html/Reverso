@@ -1,124 +1,148 @@
-import React, { useState } from "react";
-import { LayoutGrid, List, Eye, Heart, RefreshCw, ShoppingCart } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import "../../css/productsListPage.css";
+import { Eye, ShoppingCart } from "lucide-react";
+import Pagination from "../../../app/libs/data/Pagination";
+import { Product, ProductInquiry } from "../../../app/libs/types/product";
+import ProductService from "../../../app/service/ProductService";
+import { serverApi } from "../../../app/libs/config";
 
-const products = [
-  {
-    id: 1,
-    title: "Quibusdam ratione",
-    price: 46.91,
-    originalPrice: 50.99,
-    badge: "-15%",
-    status: null,
-    rating: 3,
-    image: "/img/sample1.jpg",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin lectus ipsum, gravida et mattis vulputate.",
-  },
-  {
-    id: 2,
-    title: "Expedita excepturi",
-    price: 50.91,
-    originalPrice: 55.99,
-    badge: "BESTSELLER",
-    status: null,
-    rating: 4,
-    image: "/img/sample1.jpg",
-    description: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 3,
-    title: "Quibusdam ratione",
-    price: 46.91,
-    originalPrice: 50.99,
-    badge: null,
-    status: "HOT",
-    rating: 3,
-    image: "/img/sample1.jpg",
-    description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
-  },
-];
+type ViewMode = "grid" | "list";
 
-export default function ProductsPage() {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+interface ProductsProps {
+  viewMode: ViewMode;
+  sortOrder: string;
+  filters: {
+    category: string[];
+    size: string[];
+    tag: string[];
+  };
+  onMetadataUpdate?: (data: { total: number; start: number; end: number }) => void;
+}
+
+const productService = new ProductService();
+
+const Products: React.FC<ProductsProps> = ({
+  viewMode,
+  sortOrder,
+  filters,
+  onMetadataUpdate,
+}) => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const productsPerPage = 6;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const params: ProductInquiry = {
+          order: sortOrder,
+          page: currentPage,
+          limit: productsPerPage,
+          category: filters.category,
+          size: filters.size,
+          tag: filters.tag,
+        };
+
+        const result = await productService.getProductList(params);
+
+        if (Array.isArray(result.products)) {
+          setProducts(result.products);
+          setTotal(result.total);
+
+          if (onMetadataUpdate) {
+            const start = (currentPage - 1) * productsPerPage + 1;
+            const end = start + result.products.length - 1;
+            onMetadataUpdate({ total: result.total, start, end });
+          }
+        } else {
+          console.warn("Products response is not in expected format:", result);
+          setProducts([]);
+        }
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setProducts([]);
+      }
+    };
+
+    fetchData();
+  }, [currentPage, sortOrder, filters]); // ✅ re-fetch on filter change
+
+  const handleCardClick = (id: string) => {
+    setSelectedProductIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const totalPages = Math.ceil(total / productsPerPage);
 
   return (
-    <div className="products-wrapper">
-      {/* Header */}
-      <div className="banner-header">
-        <div className="breadcrumb">Home <span>/</span> Fullwidth</div>
-        <h1>LIST VIEW</h1>
-      </div>
+    <>
+      <div className={`antique-products-wrapper ${viewMode}`}>
+        {products.map((product) => {
+          const isSelected = selectedProductIds.includes(product._id);
 
-      {/* Toolbar */}
-      <div className="products-toolbar">
-        <div className="left-controls">
-          <div className="view-toggle">
-            <button className={viewMode === "grid" ? "active" : ""} onClick={() => setViewMode("grid")}>
-              <LayoutGrid size={20} />
-            </button>
-            <button className={viewMode === "list" ? "active" : ""} onClick={() => setViewMode("list")}>
-              <List size={20} />
-            </button>
-          </div>
-          <p className="results-count">Showing 1–{products.length} of 40 results</p>
-        </div>
-
-        <div className="sort-box">
-          <label htmlFor="sort-select">Short By:</label>
-          <select id="sort-select" className="sort-select">
-            <option value="default">Default sorting</option>
-            <option value="newest">Sort by Newest</option>
-            <option value="priceLow">Price: Low to High</option>
-            <option value="priceHigh">Price: High to Low</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Products */}
-      <div className={viewMode === "grid" ? "products-grid" : "products-list"}>
-        {products.map(product => (
-          <div
-            key={product.id}
-            className={`product-card ${viewMode === "list" ? "flex-list" : ""}`}
-          >
-            {/* Image Section */}
-            <div className={viewMode === "list" ? "product-image-list" : ""}>
-              <img src={product.image} alt={product.title} />
-              {(product.badge || product.status) && (
-                <div className="badges">
-                  {product.badge && <span className="badge">{product.badge}</span>}
-                  {product.status && <span className="status">{product.status}</span>}
-                </div>
-              )}
-            </div>
-
-            {/* Info Section */}
-            <div className={viewMode === "list" ? "product-info-list" : "product-info"}>
-              <p className="price">
-                ${product.price.toFixed(2)}
-                <span className="original-price">${product.originalPrice.toFixed(2)}</span>
-              </p>
-              <h2>{product.title}</h2>
-              <div className="rating">
-                {"★".repeat(product.rating)}
-                {"☆".repeat(5 - product.rating)}
+          return (
+            <div
+              key={product._id}
+              className={`antique-product-card ${
+                viewMode === "list" ? "list-view" : "grid-view"
+              } ${isSelected ? "selected" : ""}`}
+              onClick={() => handleCardClick(product._id)}
+            >
+              
+              <div className="antique-product-image">
+              {product.productTags?.length && product.productTags.length > 0 && (
+    <div className="antique-product-tag">
+      {product.productTags?.[0]?.replace("_", " ")}
+    </div>
+  )}
+                <img
+                  src={`${serverApi}/${product.productImages[0]}`}
+                  alt={product.productName}
+                />
               </div>
 
-              {viewMode === "list" && (
-                <>
-                  <p className="description">{product.description}</p>
-                  <div className="action-icons">
-                    <button><Eye size={16} /></button>
-                    <button><Heart size={16} /></button>
-                    <button><RefreshCw size={16} /></button>
-                    <button><ShoppingCart size={16} /></button>
+              <div className="antique-product-info">
+                <div className="antique-product-price-title">
+                  <div className="antique-price">
+                    ${product.productPrice.toFixed(2)}
                   </div>
-                </>
-              )}
+                  <h4>{product.productName}</h4>
+                  <div className="antique-stars">
+                    {"★".repeat(product.productRating || 4)}
+                    {"☆".repeat(5 - (product.productRating || 4))}
+                  </div>
+                </div>
+
+                {viewMode === "list" && (
+                  <p className="antique-product-description">
+                    {product.productDesc}
+                  </p>
+                )}
+
+                <div className="antique-product-actions">
+                  <div className="antique-product-view-count">
+                    <Eye size={16} /> {product.productViews} views
+                  </div>
+                  <button>
+                    <ShoppingCart size={18} />
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-    </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
+    </>
   );
-}
+};
+
+export default Products;

@@ -1,11 +1,19 @@
-import { Product } from "./product";
+import { Product } from "./product"; // if you have a shared Product type
 
-/*React-App State*/
 export interface AppRootState {
   homePage: HomePageState;
+  productsPage: ProductsPageState;
 }
-/*HomePage*/
+
 export interface HomePageState {
   newProducts: Product[];
   popularProducts: Product[];
+}
+
+export interface ProductsPageState {
+  products: Product[];
+  selectedProductIds: number[];
+  viewMode: "grid" | "list";
+  currentPage: number;
+  productsPerPage: number;
 }

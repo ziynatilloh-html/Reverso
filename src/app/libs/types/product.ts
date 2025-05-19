@@ -28,6 +28,9 @@ export interface ProductInquiry {
   limit: number;
   productCategory?: ProductCategory;
   search?: string;
+  category?: string[]; // new
+  size?: string[]; // new
+  tag?: string[];
 }
 // Product creation input (for forms, admin panels, API calls)
 export interface ProductInput {

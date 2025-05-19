@@ -1,21 +1,33 @@
+export enum ProductGender {
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+  UNISEX = "UNISEX",
+}
+
+export enum ProductStatus {
+  DELETE = "DELETE",
+  PROCESS = "PROCESS",
+  PAUSE = "PAUSE",
+}
+
 export enum ProductCategory {
-  TOPS = "Tops",
-  BOTTOMS = "Bottoms",
-  DRESSES = "Dresses",
-  OUTERWEAR = "Outerwear",
-  ACTIVEWEAR = "Activewear",
-  LOUNGEWEAR = "Loungewear",
-  SWIMWEAR = "Swimwear",
-  SHOES = "Shoes",
-  ACCESSORIES = "Accessories",
-  BAGS = "Bags",
-  JEWELRY = "Jewelry",
-  HATS = "Hats",
-  SCARVES = "Scarves",
-  BELTS = "Belts",
-  SUNGLASSES = "Sunglasses",
-  OTHER = "Other",
-  FASHION = "Fashion",
+  TOPS = "TOPS",
+  BOTTOMS = "BOTTOMS",
+  DRESSES = "DRESSES",
+  OUTERWEAR = "OUTERWEAR",
+  ACTIVEWEAR = "ACTIVEWEAR",
+  LOUNGEWEAR = "LOUNGEWEAR",
+  SWIMWEAR = "SWIMWEAR",
+  SHOES = "SHOES",
+  ACCESSORIES = "ACCESSORIES",
+  BAGS = "BAGS",
+  JEWELRY = "JEWELRY",
+  HATS = "HATS",
+  SCARVES = "SCARVES",
+  BELTS = "BELTS",
+  SUNGLASSES = "SUNGLASSES",
+  OTHER = "OTHER",
+  FASHION = "FASHION",
 }
 export enum ProductTag {
   HOT = "HOT",
@@ -25,15 +37,8 @@ export enum ProductTag {
   SALE = "SALE",
   EXCLUSIVE = "EXCLUSIVE",
 }
-
-export enum ProductStatus {
-  ACTIVE = "Active",
-  OUT_OF_STOCK = "Out of Stock",
-  DISCONTINUED = "Discontinued",
-  COMING_SOON = "Coming Soon",
-}
 export enum ProductSortOption {
-  NEWEST = "Newest",
+  NEWEST = "NEWEST",
   PRICE_LOW_TO_HIGH = "Price: Low to High",
   PRICE_HIGH_TO_LOW = "Price: High to Low",
   BESTSELLING = "Bestselling",
