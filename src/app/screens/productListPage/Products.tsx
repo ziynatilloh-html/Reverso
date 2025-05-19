@@ -5,6 +5,8 @@ import Pagination from "../../../app/libs/data/Pagination";
 import { Product, ProductInquiry } from "../../../app/libs/types/product";
 import ProductService from "../../../app/service/ProductService";
 import { serverApi } from "../../../app/libs/config";
+import { useAppDispatch } from "../hooks";
+import { addToCart } from "../../../app/components/headers/cartSlice";
 
 type ViewMode = "grid" | "list";
 
@@ -76,6 +78,8 @@ const Products: React.FC<ProductsProps> = ({
   };
 
   const totalPages = Math.ceil(total / productsPerPage);
+  const dispatch = useAppDispatch();
+
 
   return (
     <>
@@ -126,9 +130,23 @@ const Products: React.FC<ProductsProps> = ({
                   <div className="antique-product-view-count">
                     <Eye size={16} /> {product.productViews} views
                   </div>
-                  <button>
-                    <ShoppingCart size={18} />
-                  </button>
+                  <button
+  onClick={(e) => {
+    e.stopPropagation(); // prevent card click selection
+    dispatch(
+      addToCart({
+        id: product._id,
+        name: product.productName,
+        price: product.productPrice,
+        image: product.productImages[0],
+        quantity: 1,
+      })
+    );
+  }}
+>
+  <ShoppingCart size={18} />
+</button>
+
                 </div>
               </div>
             </div>
