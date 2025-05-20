@@ -1,9 +1,14 @@
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 import OrdersPage from "./OrderPage";
+import CheckoutPage from "./CheckOut";
 
-export default function OrderPage() {
+
+export default function OrderPageRoutes() {
   return (
-    <>
-      <OrdersPage />
-    </>
+    <Routes>
+      <Route path="/" element={<OrdersPage />} />
+      <Route path="/checkout" element={<CheckoutPage />} />
+    </Routes>
   );
 }

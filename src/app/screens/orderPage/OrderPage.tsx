@@ -1,71 +1,52 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../css/orderPage.css";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useAppSelector } from "../hooks";
-import OrderService from "../../../app/service/OrderService";
-import { selectCartItems } from "../../../app/components/headers/cartSlice";
+import { useAppSelector, useAppDispatch } from "../hooks";
+import { selectCartItems, removeFromCart, increaseQty, decreaseQty } from "../../../app/components/headers/cartSlice";
 import { serverApi } from "../../../app/libs/config";
 
 const OrdersPage = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const cartItems = useAppSelector(selectCartItems);
-  const orderService = new OrderService();
 
-  const subtotal = cartItems.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
+  const subtotal = cartItems.reduce((sum: any, item: any) => sum + item.price * item.quantity, 0);
   const delivery = subtotal < 100 ? 5 : 0;
   const total = subtotal + delivery;
 
-  // Form State
-  const [shippingAddress, setShippingAddress] = useState({
-    fullName: "",
-    phone: "",
-    address: "",
-    city: "",
-    postalCode: "",
-    country: "",
-  });
-
-  const [paymentMethod, setPaymentMethod] = useState("CARD");
-
-  const handleCheckout = async () => {
-    try {
-      const orderItems = cartItems.map((item: any) => ({
-        productId: item.id,
-        itemPrice: item.price,         // ✅ correct key
-        itemQuantity: item.quantity,   // ✅ correct key
-      }));
-
-      const orderInput = {
-        orderItems,
-        paymentMethod,
-        shippingAddress,
-      };
-
-      const response = await orderService.createOrder(orderInput);
-      console.log("✅ Order created:", response);
-      navigate("/checkout");
-    } catch (error) {
-      console.error("❌ Order creation failed:", error);
-    }
+  const handleRemove = (id: string) => {
+    dispatch(removeFromCart(id));
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setShippingAddress((prev) => ({ ...prev, [name]: value }));
+  const handleIncrease = (id: string) => {
+    dispatch(increaseQty(id));
   };
+
+  const handleDecrease = (id: string) => {
+    dispatch(decreaseQty(id));
+  };
+
+  const handleGoToCheckout = () => {
+    navigate("/order/checkout");
+  };
+
+  const steps = ["Proceed to Checkout", "Place Order", "Order Finished"];
+  const currentStep = 0;
 
   return (
     <>
-      {/* ✅ Banner Section */}
-      <div className="orders-page-banner">
-        <div className="orders-banner-content">
-          <div className="orders-breadcrumb">
-            <Link to="/">Home</Link>
-            <span>/</span>
-            <span>Orders</span>
+      {/* ✅ Horizontal Progress Tracker inside wrapper */}
+      <div className="checkout-wrapper">
+        <div className="horizontal-tracker">
+          <div className="tracker-bar">
+            {steps.map((label, index) => (
+              <div key={index} className={`step-item ${index <= currentStep ? "active" : ""}`}>
+                <div className="circle">{index < currentStep ? "✓" : index + 1}</div>
+                <p className="label">{label}</p>
+              </div>
+            ))}
           </div>
-          <h1 className="orders-heading-title">Order List</h1>
         </div>
       </div>
 
@@ -86,24 +67,20 @@ const OrdersPage = () => {
             <tbody>
               {cartItems.map((item: any) => (
                 <tr key={item.id}>
-                  <td><DeleteIcon className="delete-icon" /></td>
                   <td>
-                    <img
-                      src={`${serverApi}/${item.image}`}
-                      alt={item.name}
-                      className="product-thumb"
-                    />
+                    <DeleteIcon className="delete-icon" onClick={() => handleRemove(item.id)} />
+                  </td>
+                  <td>
+                    <img src={`${serverApi}/${item.image}`} alt={item.name} className="product-thumb" />
                   </td>
                   <td>{item.name}</td>
                   <td>${item.price.toFixed(2)}</td>
                   <td>
-                    <input
-                      type="number"
-                      value={item.quantity}
-                      min={1}
-                      className="quantity-input"
-                      readOnly
-                    />
+                    <div className="quantity-control">
+                      <button type="button" onClick={() => handleDecrease(item.id)}>-</button>
+                      <input type="number" value={item.quantity} readOnly className="quantity-input" />
+                      <button type="button" onClick={() => handleIncrease(item.id)}>+</button>
+                    </div>
                   </td>
                   <td><strong>${(item.price * item.quantity).toFixed(2)}</strong></td>
                 </tr>
@@ -112,24 +89,8 @@ const OrdersPage = () => {
           </table>
         </form>
 
-        {/* ✅ Checkout Form */}
+        {/* ✅ Totals Section */}
         <div className="cart-totals">
-          <h2>Shipping & Payment</h2>
-          <div className="checkout-form">
-            <input name="fullName" placeholder="Full Name" onChange={handleChange} required />
-            <input name="phone" placeholder="Phone Number" onChange={handleChange} required />
-            <input name="address" placeholder="Address" onChange={handleChange} required />
-            <input name="city" placeholder="City" onChange={handleChange} required />
-            <input name="postalCode" placeholder="Postal Code" onChange={handleChange} required />
-            <input name="country" placeholder="Country" onChange={handleChange} required />
-
-            <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-              <option value="CARD">Card</option>
-              <option value="PAYPAL">PayPal</option>
-              <option value="CASH_ON_DELIVERY">Cash on Delivery</option>
-            </select>
-          </div>
-
           <h2>Cart Totals</h2>
           <table>
             <tbody>
@@ -138,12 +99,16 @@ const OrdersPage = () => {
                 <td>${subtotal.toFixed(2)}</td>
               </tr>
               <tr>
+                <th>Delivery</th>
+                <td>${delivery.toFixed(2)}</td>
+              </tr>
+              <tr>
                 <th>Total</th>
                 <td>${total.toFixed(2)}</td>
               </tr>
             </tbody>
           </table>
-          <button className="checkout-btn" onClick={handleCheckout}>
+          <button className="checkout-btn" onClick={handleGoToCheckout}>
             Proceed To Checkout
           </button>
         </div>
