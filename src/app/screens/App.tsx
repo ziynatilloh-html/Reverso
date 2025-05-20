@@ -1,7 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./homePage";
 import ProductListPage from "./productListPage";
-import CartPage from "./cartPage";
 import CheckoutPage from "./checkoutPage";
 import AccountPage from "./accountPage";
 import SearchPage from "./searchPage";
@@ -19,12 +18,13 @@ import "../css/basket.css";
 import "../css/navbar.css";
 import "../css/footer.css";
 import "../css/app.css";
+import OrderPage from "./orderPage/OrderPage";
 
 function App() {
   const location = useLocation();
   const { authMember } = useGlobal();
 
-  // Pages where Navbar and Footer should be hidden
+
   const hideNavAndFooter = [
     "/login",
     "/member/signup",
@@ -42,7 +42,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<ProductListPage />} />
         <Route path="/products/:id" element={<ProductListPage />} />
-        <Route path="/cart" element={<CartPage />} />
+        <Route path="/order" element={<OrderPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/search" element={<SearchPage />} />
