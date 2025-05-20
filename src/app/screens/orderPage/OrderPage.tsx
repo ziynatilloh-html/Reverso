@@ -1,13 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../css/orderPage.css";
 import { useNavigate, Link } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useAppSelector } from "../hooks";
+import OrderService from "../../../app/service/OrderService";
+import { selectCartItems } from "../../../app/components/headers/cartSlice";
+import { serverApi } from "../../../app/libs/config";
 
 const OrdersPage = () => {
   const navigate = useNavigate();
+  const cartItems = useAppSelector(selectCartItems);
+  const orderService = new OrderService();
 
-  const handleCheckout = () => {
-    navigate("/checkout");
+  const subtotal = cartItems.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
+  const delivery = subtotal < 100 ? 5 : 0;
+  const total = subtotal + delivery;
+
+  // Form State
+  const [shippingAddress, setShippingAddress] = useState({
+    fullName: "",
+    phone: "",
+    address: "",
+    city: "",
+    postalCode: "",
+    country: "",
+  });
+
+  const [paymentMethod, setPaymentMethod] = useState("CARD");
+
+  const handleCheckout = async () => {
+    try {
+      const orderItems = cartItems.map((item: any) => ({
+        productId: item.id,
+        itemPrice: item.price,         // ✅ correct key
+        itemQuantity: item.quantity,   // ✅ correct key
+      }));
+
+      const orderInput = {
+        orderItems,
+        paymentMethod,
+        shippingAddress,
+      };
+
+      const response = await orderService.createOrder(orderInput);
+      console.log("✅ Order created:", response);
+      navigate("/checkout");
+    } catch (error) {
+      console.error("❌ Order creation failed:", error);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setShippingAddress((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -39,47 +84,62 @@ const OrdersPage = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><DeleteIcon className="delete-icon" /></td>
-                <td><img src="/img/sample1.jpg" alt="Product" className="product-thumb" /></td>
-                <td>Juma Rema Pola</td>
-                <td>$46.80</td>
-                <td>
-                  <input type="number" min={1} defaultValue={1} className="quantity-input" />
-                </td>
-                <td><strong>$46.80</strong></td>
-              </tr>
-              <tr>
-                <td><DeleteIcon className="delete-icon" /></td>
-                <td><img src="/img/sample2.jpg" alt="Product" className="product-thumb" /></td>
-                <td>Bag Goodscol Model</td>
-                <td>$71.80</td>
-                <td>
-                  <input type="number" min={1} defaultValue={1} className="quantity-input" />
-                </td>
-                <td><strong>$71.80</strong></td>
-              </tr>
+              {cartItems.map((item: any) => (
+                <tr key={item.id}>
+                  <td><DeleteIcon className="delete-icon" /></td>
+                  <td>
+                    <img
+                      src={`${serverApi}/${item.image}`}
+                      alt={item.name}
+                      className="product-thumb"
+                    />
+                  </td>
+                  <td>{item.name}</td>
+                  <td>${item.price.toFixed(2)}</td>
+                  <td>
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      min={1}
+                      className="quantity-input"
+                      readOnly
+                    />
+                  </td>
+                  <td><strong>${(item.price * item.quantity).toFixed(2)}</strong></td>
+                </tr>
+              ))}
             </tbody>
           </table>
-
-          <div className="cart-actions">
-
-            <button type="button" className="update-cart-btn">Update Cart</button>
-          </div>
         </form>
 
-        {/* ✅ Totals Section */}
+        {/* ✅ Checkout Form */}
         <div className="cart-totals">
+          <h2>Shipping & Payment</h2>
+          <div className="checkout-form">
+            <input name="fullName" placeholder="Full Name" onChange={handleChange} required />
+            <input name="phone" placeholder="Phone Number" onChange={handleChange} required />
+            <input name="address" placeholder="Address" onChange={handleChange} required />
+            <input name="city" placeholder="City" onChange={handleChange} required />
+            <input name="postalCode" placeholder="Postal Code" onChange={handleChange} required />
+            <input name="country" placeholder="Country" onChange={handleChange} required />
+
+            <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+              <option value="CARD">Card</option>
+              <option value="PAYPAL">PayPal</option>
+              <option value="CASH_ON_DELIVERY">Cash on Delivery</option>
+            </select>
+          </div>
+
           <h2>Cart Totals</h2>
           <table>
             <tbody>
               <tr>
                 <th>Subtotal</th>
-                <td>$118.60</td>
+                <td>${subtotal.toFixed(2)}</td>
               </tr>
               <tr>
                 <th>Total</th>
-                <td>$118.60</td>
+                <td>${total.toFixed(2)}</td>
               </tr>
             </tbody>
           </table>
