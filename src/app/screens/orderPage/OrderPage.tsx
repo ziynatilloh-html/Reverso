@@ -1,17 +1,32 @@
 import React from "react";
 import "../../css/orderPage.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppSelector, useAppDispatch } from "../hooks";
-import { selectCartItems, removeFromCart, increaseQty, decreaseQty } from "../../../app/components/headers/cartSlice";
+import {
+  selectCartItems,
+  removeFromCart,
+  increaseQty,
+  decreaseQty,
+} from "../../../app/components/headers/cartSlice";
 import { serverApi } from "../../../app/libs/config";
 
 const OrdersPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(selectCartItems);
+  const location = useLocation();
 
-  const subtotal = cartItems.reduce((sum: any, item: any) => sum + item.price * item.quantity, 0);
+  const steps: string[] = ["Proceed to Checkout", "Place Order"];
+
+  // ✅ Route-based step detection (2 pages only)
+  const path = location.pathname;
+  const currentStep = path === "/order/checkout" ? 1 : 0;
+
+  const subtotal = cartItems.reduce(
+    (sum: number, item: any) => sum + item.price * item.quantity,
+    0
+  );
   const delivery = subtotal < 100 ? 5 : 0;
   const total = subtotal + delivery;
 
@@ -31,21 +46,28 @@ const OrdersPage = () => {
     navigate("/order/checkout");
   };
 
-  const steps = ["Proceed to Checkout", "Place Order", "Order Finished"];
-  const currentStep = 0;
-
   return (
     <>
-      {/* ✅ Horizontal Progress Tracker inside wrapper */}
+      {/* ✅ Horizontal Progress Tracker */}
       <div className="checkout-wrapper">
         <div className="horizontal-tracker">
           <div className="tracker-bar">
-            {steps.map((label, index) => (
-              <div key={index} className={`step-item ${index <= currentStep ? "active" : ""}`}>
-                <div className="circle">{index < currentStep ? "✓" : index + 1}</div>
-                <p className="label">{label}</p>
-              </div>
-            ))}
+            {steps.map((label: string, index: number) => {
+              const isCompleted = index < currentStep;
+              const isActive = index === currentStep;
+
+              return (
+                <div
+                  key={index}
+                  className={`step-item ${isCompleted ? "completed" : ""} ${
+                    isActive ? "active" : ""
+                  }`}
+                >
+                  <div className="circle">{isCompleted ? "✓" : index + 1}</div>
+                  <p className="label">{label}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -68,21 +90,39 @@ const OrdersPage = () => {
               {cartItems.map((item: any) => (
                 <tr key={item.id}>
                   <td>
-                    <DeleteIcon className="delete-icon" onClick={() => handleRemove(item.id)} />
+                    <DeleteIcon
+                      className="delete-icon"
+                      onClick={() => handleRemove(item.id)}
+                    />
                   </td>
                   <td>
-                    <img src={`${serverApi}/${item.image}`} alt={item.name} className="product-thumb" />
+                    <img
+                      src={`${serverApi}/${item.image}`}
+                      alt={item.name}
+                      className="product-thumb"
+                    />
                   </td>
                   <td>{item.name}</td>
                   <td>${item.price.toFixed(2)}</td>
                   <td>
                     <div className="quantity-control">
-                      <button type="button" onClick={() => handleDecrease(item.id)}>-</button>
-                      <input type="number" value={item.quantity} readOnly className="quantity-input" />
-                      <button type="button" onClick={() => handleIncrease(item.id)}>+</button>
+                      <button type="button" onClick={() => handleDecrease(item.id)}>
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        value={item.quantity}
+                        readOnly
+                        className="quantity-input"
+                      />
+                      <button type="button" onClick={() => handleIncrease(item.id)}>
+                        +
+                      </button>
                     </div>
                   </td>
-                  <td><strong>${(item.price * item.quantity).toFixed(2)}</strong></td>
+                  <td>
+                    <strong>${(item.price * item.quantity).toFixed(2)}</strong>
+                  </td>
                 </tr>
               ))}
             </tbody>
