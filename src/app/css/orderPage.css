@@ -327,3 +327,202 @@
   background-color: #6c63ff;
   color: #fff;
 }
+/* === OrderConfirmation Layout === */
+.order-confirmation {
+  padding: 40px;
+  background: #f7f8fd;
+  font-family: "Inter", sans-serif;
+  min-height: auto;
+  margin-top: 200px;
+}
+
+.confirmation-grid {
+  display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+/* === Left Panel: Items === */
+.items-panel {
+  flex: 2;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.items-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.remove-all {
+  background: none;
+  color: red;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+.item-card {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f8f9ff;
+  border-radius: 12px;
+}
+
+.item-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 16px;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-info h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.qty-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.qty-box button {
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.item-price {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.order-summary {
+  margin-top: 32px;
+  background: #f5f6ff;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.order-summary h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.summary-line,
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.summary-total {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* === Right Panel: Payment === */
+.payment-panel {
+  flex: 1.2;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.payment-panel h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.payment-methods {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.payment-methods img {
+  height: 32px;
+}
+
+.payment-form label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.payment-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.pay-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(to right, #8e2de2, #4a00e0);
+  border: none;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: 0.3s;
+}
+
+.pay-btn:hover {
+  opacity: 0.9;
+}
+.remove-all {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #c70000;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.item-delete-icon {
+  vertical-align: middle;
+}
