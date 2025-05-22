@@ -100,8 +100,6 @@
 }
 .horizontal-tracker {
   margin-top: 200px;
-  background-color: #3955a5;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
   max-width: 1013px;
   margin-left: auto;
   margin-right: auto;
@@ -132,12 +130,12 @@
   right: -50%;
   width: 100%;
   height: 4px;
-  background-color: #58bd8c;
+  background-color: #0059ff;
   z-index: 0;
 }
 
 .step-item.active:not(:last-child)::after {
-  background-color: #a30000;
+  background-color: #ffffff;
 }
 
 .step-item .circle {
@@ -166,7 +164,7 @@
   margin-top: 1px;
   font-weight: 500;
   font-size: 15px;
-  color: #ffffff;
+  color: #00b3ff;
 }
 
 @media screen and (max-width: 768px) {
@@ -225,7 +223,7 @@
 
 .remove-all {
   background: none;
-  color: red;
+  color: rgb(0, 0, 0);
   font-weight: 500;
   border: none;
   cursor: pointer;
@@ -280,6 +278,7 @@
 }
 
 .item-price {
+  margin-bottom: 10px;
   font-weight: 600;
   font-size: 16px;
 }
@@ -462,4 +461,11 @@
 }
 .step-item.completed .circle {
   background-color: #00c853 !important; /* ✅ green for completed steps */
+}
+.item-delete-icon {
+  color: #000000 !important;
+  cursor: pointer !important;
+  font-size: 19px !important;
+  margin-left: 35px !important;
+  margin-top: -3px !important;
 }

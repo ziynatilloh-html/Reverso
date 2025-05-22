@@ -3,7 +3,6 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./homePage";
 import ProductListPage from "./productListPage";
 import AccountPage from "./accountPage";
-import SearchPage from "./searchPage";
 import NotFoundPage from "./notFoundPage";
 import { HomeNavbar } from "../components/headers/HomeNavbar";
 import OtherNavbar from "../components/headers/OtherNavbar";
@@ -23,6 +22,7 @@ import "../css/basket.css";
 import "../css/navbar.css";
 import "../css/footer.css";
 import "../css/app.css";
+import AboutUs from "./aboutUsPage";
 
 // ✅ Stripe Public Test Key
 const stripePromise = loadStripe("pk_test_51RQnE0R2xYxm90hWTuEd0YHvKPbe3LKKDr07FPTeNJCVlS01Mc2kUr1C0IEmk3O39bK0rmyIJ2f8RgeXWoA4Cv0U00hSr9bnQa");
@@ -64,7 +64,7 @@ function App() {
           <Route path="/products/:id" element={<ProductListPage />} />
           <Route path="/order/*" element={<OrderPageRoutes />} />
           <Route path="/account" element={<AccountPage />} />
-          <Route path="/search" element={<SearchPage />} />
+          <Route path="/about" element={<AboutUs />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/member/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordForm />} />

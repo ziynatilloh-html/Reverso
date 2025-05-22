@@ -6,6 +6,8 @@ import { useGlobal } from "../../hooks/useGlobal";
 import { serverApi } from "../../libs/config";
 import "../../css/accountPage.css";
 import MemberService from "../../../app/service/MemberService";
+import ProductsBanner from "../productListPage/ShopBanner";
+ // ✅ use dynamic banner
 
 const UserSettingsPage = () => {
   const [activeTab, setActiveTab] = useState("settings");
@@ -45,7 +47,6 @@ const UserSettingsPage = () => {
       setFile(uploaded);
       setPreview(URL.createObjectURL(uploaded));
     }
-    
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -59,28 +60,19 @@ const UserSettingsPage = () => {
     try {
       await memberService.updateMemberProfile(formData);
 
-      // 🔁 Refetch updated member info
       const refreshed = await memberService.getMyDetails();
-
-      // ✅ Set new data to global context
       setAuthMember(refreshed);
-
-      // ✅ Update preview with fresh image (force refresh with cache busting)
       setPreview(
         refreshed.memberImage
           ? `${serverApi}/uploads/members/${refreshed.memberImage}?v=${Date.now()}`
           : "/icons/default-user.svg"
       );
-
-      // ✅ Update form fields
       setForm({
         memberNick: refreshed.memberNick || "",
         memberEmail: refreshed.memberEmail || "",
         memberPhone: refreshed.memberPhone || "",
         memberAddress: refreshed.memberAddress || "",
       });
-      console.log("🔁 Refreshed member:", refreshed);
-
 
       alert("✅ Profile updated!");
     } catch (err) {
@@ -171,10 +163,13 @@ const UserSettingsPage = () => {
   };
 
   return (
-    <div className="account-wrapper" style={{ display: "flex", padding: "40px", gap: "30px" }}>
-      <AccountSidebar onSelect={setActiveTab} activeTab={activeTab} />
-      <div className="account-main" style={{ flex: 1 }}>{renderContent()}</div>
-    </div>
+    <>
+      <ProductsBanner /> {/* ✅ Banner added here */}
+      <div className="account-wrapper" style={{ display: "flex", padding: "40px", gap: "30px" }}>
+        <AccountSidebar onSelect={setActiveTab} activeTab={activeTab} />
+        <div className="account-main" style={{ flex: 1 }}>{renderContent()}</div>
+      </div>
+    </>
   );
 };
 

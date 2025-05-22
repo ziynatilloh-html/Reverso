@@ -10,6 +10,7 @@ import {
   decreaseQty,
 } from "../../../app/components/headers/cartSlice";
 import { serverApi } from "../../../app/libs/config";
+import ProductsBanner from "../productListPage/ShopBanner";
 
 const OrdersPage = () => {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ const OrdersPage = () => {
 
   return (
     <>
-      {/* ✅ Horizontal Progress Tracker */}
+    <div><ProductsBanner/></div>
       <div className="checkout-wrapper">
         <div className="horizontal-tracker">
           <div className="tracker-bar">

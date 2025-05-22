@@ -13,6 +13,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import OrderService from "../../../app/service/OrderService";
 import "../../css/orderPage.css";
+import ProductsBanner from "../productListPage/ShopBanner";
 
 
 const OrderConfirmation = () => {
@@ -129,7 +130,7 @@ const OrderConfirmation = () => {
   const currentStep = path === "/order/checkout" ? 2 : 1;
   return (
     <>
-      {/* Progress Tracker */}
+      <div><ProductsBanner/></div>
       <div className="checkout-wrapper">
         <div className="horizontal-tracker">
           <div className="tracker-bar">
@@ -162,7 +163,7 @@ const OrderConfirmation = () => {
               <h2>Items ({cartItems.length})</h2>
               <button className="remove-all" onClick={handleClearCart}>
                 <DeleteIcon style={{ fontSize: 20, marginRight: 6 }} />
-                <span style={{ color: "#c70000", fontSize: "16px" }}>Remove all</span>
+                <span style={{ color: "#000000", fontSize: "16px" }}>Remove all</span>
               </button>
             </div>
 
@@ -183,7 +184,7 @@ const OrderConfirmation = () => {
                   ${item.price.toFixed(2)}
                   <DeleteIcon
                     className="item-delete-icon"
-                    style={{ marginLeft: 10, cursor: "pointer", color: "#c70000" }}
+                    style={{marginLeft: 10, cursor: "pointer", color: "#c70000" }}
                     onClick={() => handleRemoveItem(item.id)}
                   />
                 </div>
