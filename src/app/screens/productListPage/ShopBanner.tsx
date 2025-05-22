@@ -8,6 +8,7 @@ const ProductsBanner = () => {
   const getTitle = () => {
     if (location.pathname.startsWith("/order")) return "Order Page";
     if (location.pathname.startsWith("/account")) return "My Page";
+    if (location.pathname.startsWith("/about")) return "About Us";
     return "Shop List";
   };
 

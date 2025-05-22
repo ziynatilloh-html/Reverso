@@ -10,6 +10,7 @@ import {
 import "../../css/aboutUs.css";
 import Statistics from "../homePage/Statistics";
 import { GitHub } from "@mui/icons-material";
+import ProductsBanner from "../productListPage/ShopBanner";
 
 const AboutUsPage = () => {
   const teamData = [
@@ -18,8 +19,10 @@ const AboutUsPage = () => {
     { name: "Zendaya", role: "Brand Strategist" },
   ];
 
-  return (
+  return (  <>
+    <ProductsBanner  />
     <div className="about-container">
+      
       {/* Intro Section in container */}
       <section className="intro-section">
         <div className="intro-content">
@@ -80,6 +83,7 @@ const AboutUsPage = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 
