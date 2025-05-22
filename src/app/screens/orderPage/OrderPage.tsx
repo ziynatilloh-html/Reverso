@@ -51,26 +51,31 @@ const OrdersPage = () => {
     <>
     <div><ProductsBanner/></div>
       <div className="checkout-wrapper">
-        <div className="horizontal-tracker">
-          <div className="tracker-bar">
-            {steps.map((label: string, index: number) => {
-              const isCompleted = index < currentStep;
-              const isActive = index === currentStep;
+ <div className="horizontal-tracker">
+  <div className="tracker-bar">
+    {steps.map((label, index) => {
+      const isCompleted = index < currentStep;
+      const isActive = index === currentStep;
+      const isUpcoming = index > currentStep;
 
-              return (
-                <div
-                  key={index}
-                  className={`step-item ${isCompleted ? "completed" : ""} ${
-                    isActive ? "active" : ""
-                  }`}
-                >
-                  <div className="circle">{isCompleted ? "✓" : index + 1}</div>
-                  <p className="label">{label}</p>
-                </div>
-              );
-            })}
+      return (
+        <div
+          key={index}
+          className={`step-item ${isCompleted ? "completed" : ""} ${
+            isActive ? "active" : ""
+          } ${isUpcoming ? "upcoming" : ""}`}
+        >
+          <div className="circle">
+            {isCompleted ? "✓" : index + 1}
           </div>
+          <div className="label">{label}</div>
         </div>
+      );
+    })}
+  </div>
+</div>
+
+
       </div>
 
       {/* ✅ Cart Table Section */}

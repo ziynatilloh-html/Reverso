@@ -1,5 +1,5 @@
-import { Container } from "@mui/material";
+import ContactUs from "./ContactUs";
 
 export default function CheckoutPage() {
-  return <Container>CheckoutPage</Container>;
+  return <ContactUs/>;
 }

@@ -9,6 +9,7 @@ const ProductsBanner = () => {
     if (location.pathname.startsWith("/order")) return "Order Page";
     if (location.pathname.startsWith("/account")) return "My Page";
     if (location.pathname.startsWith("/about")) return "About Us";
+    if (location.pathname.startsWith("/contact")) return "Contact Us";
     return "Shop List";
   };
 

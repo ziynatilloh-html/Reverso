@@ -23,6 +23,7 @@ import "../css/navbar.css";
 import "../css/footer.css";
 import "../css/app.css";
 import AboutUs from "./aboutUsPage";
+import ContactUs from "./contactUsPage/ContactUs";
 
 // ✅ Stripe Public Test Key
 const stripePromise = loadStripe("pk_test_51RQnE0R2xYxm90hWTuEd0YHvKPbe3LKKDr07FPTeNJCVlS01Mc2kUr1C0IEmk3O39bK0rmyIJ2f8RgeXWoA4Cv0U00hSr9bnQa");
@@ -65,6 +66,7 @@ function App() {
           <Route path="/order/*" element={<OrderPageRoutes />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/member/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordForm />} />
