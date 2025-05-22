@@ -14,6 +14,8 @@ import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import OrderService from "../../../app/service/OrderService";
 import "../../css/orderPage.css";
 import ProductsBanner from "../productListPage/ShopBanner";
+import { useGlobal } from "../../../app/hooks/useGlobal";
+import MemberService from "../../../app/service/MemberService";
 
 
 const OrderConfirmation = () => {
@@ -23,7 +25,7 @@ const OrderConfirmation = () => {
   const stripe = useStripe();
   const elements = useElements();
   const orderService = new OrderService();
-
+  const { setAuthMember } = useGlobal();
   const [form, setForm] = useState({
     fullName: "",
     phone: "",
@@ -76,10 +78,10 @@ const OrderConfirmation = () => {
   const handlePayNow = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!stripe || !elements) return;
-
+  
     try {
       const { clientSecret } = await orderService.createPaymentIntent(total);
-
+  
       const result = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: elements.getElement(CardElement)!,
@@ -88,13 +90,13 @@ const OrderConfirmation = () => {
           },
         },
       });
-
+  
       if (result.error) {
         alert("Payment failed: " + result.error.message);
       } else if (result.paymentIntent.status === "succeeded") {
         // ✅ Lock in cart snapshot
         setCartSnapshot([...cartItems]);
-
+  
         const orderInput = {
           shippingAddress: {
             fullName: form.fullName,
@@ -105,7 +107,7 @@ const OrderConfirmation = () => {
             country: form.country,
           },
           paymentMethod: form.paymentMethod,
-          orderItems: cartItems.map((item:any) => ({
+          orderItems: cartItems.map((item: any) => ({
             productId: item.id,
             itemPrice: item.price,
             itemQuantity: item.quantity,
@@ -113,8 +115,14 @@ const OrderConfirmation = () => {
             productImage: item.image,
           })),
         };
-
+  
         const savedOrder = await orderService.saveOrderToDatabase(orderInput);
+  
+        // ✅ Refresh member info (for updated points)
+        const updatedMember = await new MemberService().getMyDetails();
+        setAuthMember(updatedMember);
+  
+        // ✅ Clear cart and show success
         dispatch(clearCart());
         setOrderId(savedOrder._id);
         setPaymentSuccess(true);
@@ -123,6 +131,8 @@ const OrderConfirmation = () => {
       console.error("❌ Payment error:", err);
     }
   };
+ 
+  
 
   const steps = ["Proceed to Checkout", "Place Order"];
   const location = useLocation();

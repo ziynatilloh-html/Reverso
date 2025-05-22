@@ -16,14 +16,16 @@ import { useGlobal } from "../../../app/hooks/useGlobal";
 import { serverApi } from "../../../app/libs/config";
 import { Logout } from "@mui/icons-material";
 import { useAppSelector } from "../../../app/screens/hooks";
-import { selectCartItems } from "./cartSlice";
+import { clearCart, selectCartItems } from "./cartSlice";
+import { useDispatch } from "react-redux/es";
+
 
 export function HomeNavbar() {
   const { authMember, setAuthMember } = useGlobal();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleCartOpen = () => setIsCartOpen(true);
   const handleCartClose = () => setIsCartOpen(false);
 
@@ -38,6 +40,8 @@ export function HomeNavbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("memberData");
+    dispatch(clearCart());
+    localStorage.removeItem("cartItems");
     setAuthMember(null);
     navigate("/");
     handleMenuClose();

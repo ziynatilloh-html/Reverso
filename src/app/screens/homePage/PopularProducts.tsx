@@ -39,6 +39,15 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
         {product.productTags?.includes(ProductTag.BESTSELLER) && (
           <span className="product-badge bestseller">BESTSELLER</span>
         )}
+        {product.productTags?.includes(ProductTag.NEW_ARRIVAL) && (
+                  <span className="product-badge bestseller">NEW_ARRIVAL</span>
+                )}{product.productTags?.includes(ProductTag.LIMITED_EDITION) && (
+                  <span className="product-badge bestseller">LIMITED_EDITION</span>
+                )}{product.productTags?.includes(ProductTag.SALE) && (
+                  <span className="product-badge bestseller">SALE</span>
+                )}{product.productTags?.includes(ProductTag.EXCLUSIVE) && (
+                  <span className="product-badge bestseller">EXCLUSIVE</span>
+                )}
       </div>
       <div className="product-info">
         <h3 className="product-name">{product.productName}</h3>

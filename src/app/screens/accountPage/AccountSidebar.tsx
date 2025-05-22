@@ -3,7 +3,6 @@ import "../../css/accountPage.css";
 import {
   User,
   ShoppingBag,
-  MapPin,
   Settings,
 } from "lucide-react";
 

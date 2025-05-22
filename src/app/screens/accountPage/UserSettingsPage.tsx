@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import AccountSidebar from "./AccountSidebar";
-import UserInfoPage from "./UserInfoPage";
-import Orders from "./Orders";
 import { useGlobal } from "../../hooks/useGlobal";
 import { serverApi } from "../../libs/config";
 import "../../css/accountPage.css";
 import MemberService from "../../../app/service/MemberService";
-import ProductsBanner from "../productListPage/ShopBanner";
- // ✅ use dynamic banner
-
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 const UserSettingsPage = () => {
-  const [activeTab, setActiveTab] = useState("settings");
   const { authMember, setAuthMember } = useGlobal();
   const memberService = new MemberService();
 
@@ -81,95 +75,74 @@ const UserSettingsPage = () => {
     }
   };
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case "userinfo":
-        return <UserInfoPage />;
-      case "orders":
-        return <Orders />;
-      case "settings":
-        return (
-          <div className="dashboard-container">
-            <h2 className="dashboard-title">Account Settings</h2>
-            <p className="dashboard-subtitle">Update your personal info</p>
-
-            <form onSubmit={handleSubmit} className="profile-section">
-              <div className="profile-image-card">
-                <div className="profile-img-wrapper">
-                  <img src={preview} alt="Preview" className="profile-img" />
-                  <label htmlFor="photo-upload" className="upload-icon">📷</label>
-                  <input
-                    id="photo-upload"
-                    type="file"
-                    hidden
-                    accept="image/*"
-                    onChange={handleImageChange}
-                  />
-                </div>
-                <div className="profile-name">{form.memberNick}</div>
-              </div>
-
-              <div className="info-fields">
-                <div className="field-box">
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    name="memberNick"
-                    value={form.memberNick}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="field-box">
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    name="memberEmail"
-                    value={form.memberEmail}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="field-box">
-                  <label>Phone</label>
-                  <input
-                    type="text"
-                    name="memberPhone"
-                    value={form.memberPhone}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="field-box">
-                  <label>Address</label>
-                  <input
-                    type="text"
-                    name="memberAddress"
-                    value={form.memberAddress}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="field-box" style={{ gridColumn: "1 / -1" }}>
-                  <button type="submit" className="pay-btn">Save Changes</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        );
-      default:
-        return <UserInfoPage />;
-    }
-  };
-
   return (
-    <>
-      <ProductsBanner /> {/* ✅ Banner added here */}
-      <div className="account-wrapper" style={{ display: "flex", padding: "40px", gap: "30px" }}>
-        <AccountSidebar onSelect={setActiveTab} activeTab={activeTab} />
-        <div className="account-main" style={{ flex: 1 }}>{renderContent()}</div>
-      </div>
-    </>
+    <div className="dashboard-container">
+      <h2 className="dashboard-title">Account Settings</h2>
+      <p className="dashboard-subtitle">Update your personal info</p>
+
+      <form onSubmit={handleSubmit} className="profile-section">
+        <div className="profile-image-card">
+          <div className="profile-img-wrapper">
+            <img src={preview} alt="Preview" className="profile-img" />
+            <label htmlFor="photo-upload" className="upload-icon"><CameraAltIcon fontSize="small" /></label>
+            <input
+              id="photo-upload"
+              type="file"
+              hidden
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </div>
+          <div className="profile-name">{form.memberNick}</div>
+        </div>
+
+        <div className="info-fields">
+          <div className="field-box">
+            <label>Name</label>
+            <input
+              type="text"
+              name="memberNick"
+              value={form.memberNick}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="field-box">
+            <label>Email</label>
+            <input
+              type="email"
+              name="memberEmail"
+              value={form.memberEmail}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="field-box">
+            <label>Phone</label>
+            <input
+              type="text"
+              name="memberPhone"
+              value={form.memberPhone}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="field-box">
+            <label>Address</label>
+            <input
+              type="text"
+              name="memberAddress"
+              value={form.memberAddress}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="field-box" style={{ gridColumn: "1 / -1" }}>
+            <button type="submit" className="pay-btn">Save Changes</button>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 };
 

@@ -16,8 +16,8 @@ import { useState } from "react";
 import { useGlobal } from "../../../app/hooks/useGlobal";
 import { serverApi } from "../../../app/libs/config";
 import { useAppSelector } from "../../../app/screens/hooks";
-import { selectCartItems } from "./cartSlice";
-
+import { clearCart, selectCartItems } from "./cartSlice";
+import { useDispatch } from "react-redux/es";
 
 export default function OtherNavbar() {
   const { authMember, setAuthMember } = useGlobal();
@@ -27,7 +27,7 @@ export default function OtherNavbar() {
 
   const handleCartOpen = () => setIsCartOpen(true);
   const handleCartClose = () => setIsCartOpen(false);
-
+ const dispatch = useDispatch();
   const cartItems = useAppSelector(selectCartItems);
  const cartCount = cartItems.reduce((sum: number, item:any) => sum + item.quantity, 0);
 
@@ -41,6 +41,8 @@ export default function OtherNavbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("memberData");
+     dispatch(clearCart());
+    localStorage.removeItem("cartItems");
     setAuthMember(null);
     navigate("/");
     handleMenuClose();
