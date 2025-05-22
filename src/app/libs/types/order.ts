@@ -11,6 +11,8 @@ export interface OrderItemInput {
   productId: string;
   itemPrice: number;
   itemQuantity: number;
+  productName: string; // ✅ NEW
+  productImage: string;
 }
 
 export interface OrderInput {

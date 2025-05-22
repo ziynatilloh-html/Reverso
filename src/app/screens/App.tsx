@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./homePage";
 import ProductListPage from "./productListPage";
@@ -13,6 +14,7 @@ import ForgotPasswordForm from "../components/auth/ForgotPasswordForm";
 import ResetPasswordPage from "../components/auth/ResetPasswordForm";
 import { useGlobal } from "../hooks/useGlobal";
 import OrderPageRoutes from "./orderPage";
+import MemberService from "../service/MemberService";
 
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -23,11 +25,11 @@ import "../css/footer.css";
 import "../css/app.css";
 
 // ✅ Stripe Public Test Key
-const stripePromise = loadStripe("pk_test_51RQnE0R2xYxm90hWTuEd0YHvKPbe3LKKDr07FPTeNJCVlS01Mc2kUr1C0IEmk3O39bK0rmyIJ2f8RgeXWoA4Cv0U00hSr9bnQa"); // Replace with your actual test key
+const stripePromise = loadStripe("pk_test_51RQnE0R2xYxm90hWTuEd0YHvKPbe3LKKDr07FPTeNJCVlS01Mc2kUr1C0IEmk3O39bK0rmyIJ2f8RgeXWoA4Cv0U00hSr9bnQa");
 
 function App() {
   const location = useLocation();
-  const { authMember } = useGlobal();
+  const { authMember, setAuthMember } = useGlobal();
 
   const hideNavAndFooter = [
     "/login",
@@ -36,34 +38,41 @@ function App() {
     "/reset-password/:token",
   ].includes(location.pathname);
 
+  // ✅ Fetch current user on first load
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const service = new MemberService();
+        const member = await service.getMyDetails();
+        setAuthMember(member);
+      } catch (err) {
+        console.warn("No active session or failed to fetch user.");
+      }
+    };
+
+    fetchUser();
+  }, [setAuthMember]);
+
   return (
     <>
-      {/* ✅ Navbar logic — based on authMember */}
       {!hideNavAndFooter && (authMember ? <OtherNavbar /> : <HomeNavbar />)}
 
-      {/* ✅ Wrap with Stripe Elements */}
       <Elements stripe={stripePromise}>
         <Routes>
-          {/* Public pages */}
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductListPage />} />
           <Route path="/products/:id" element={<ProductListPage />} />
           <Route path="/order/*" element={<OrderPageRoutes />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/search" element={<SearchPage />} />
-
-          {/* Auth pages */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/member/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordForm />} />
           <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-
-          {/* Not found */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Elements>
 
-      {/* ✅ Footer logic */}
       {!hideNavAndFooter && <Footer />}
     </>
   );

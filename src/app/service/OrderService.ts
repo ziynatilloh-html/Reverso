@@ -21,6 +21,11 @@ class OrderService {
     const result = await axios.post(url, orderInput, { withCredentials: true });
     return result.data;
   }
+  public async getOrdersByMember(memberId: string): Promise<any[]> {
+    const url = `${this.path}/api/order/member/${memberId}`;
+    const result = await axios.get(url, { withCredentials: true });
+    return result.data;
+  }
 }
 
 export default OrderService;

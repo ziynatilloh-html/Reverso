@@ -108,6 +108,8 @@ const OrderConfirmation = () => {
             productId: item.id,
             itemPrice: item.price,
             itemQuantity: item.quantity,
+            productName: item.name,
+            productImage: item.image,
           })),
         };
 
